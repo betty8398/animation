@@ -8,17 +8,19 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button button_up, button_down, button_left, button_right, button_DL, button_DR, button_UL, button_UR, button_reset,
-            button_stop,button_run;
+            button_stop,button_run,button_rotaion;
     private ImageView imageView_stand;
     private String TAG = "main";
     private float x, y,x_location,y_location;
     private AnimationDrawable animDrew;
+    private ObjectAnimator animRotate;
 
     private void SetView() {
         button_up = findViewById(R.id.button_up);
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         button_reset = findViewById(R.id.button_reset);
         button_stop = findViewById(R.id.button_stop);
         button_run = findViewById(R.id.button_run);
+        button_rotaion = findViewById(R.id.button_rotaion);
 
         imageView_stand = findViewById(R.id.imageView_stand);
     }
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         button_reset.setOnClickListener(new MyButton());
         button_stop.setOnClickListener(new MyButton());
         button_run.setOnClickListener(new MyButton());
+        button_rotaion.setOnClickListener(new MyButton());
     }
 
 
@@ -108,10 +112,14 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.button_stop:
                     animDrew.stop();
+                    animRotate.end();
                     animDrew.selectDrawable(1);
                     break;
                 case R.id.button_run:
                     animDrew.start();
+                    break;
+                case R.id.button_rotaion:
+                    rotaion();
                     break;
             }
             Log.d(TAG, "x = "+x_location+" y = "+y_location);
@@ -144,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void rotaion(){
+
+        animRotate = ObjectAnimator.ofFloat(imageView_stand,"rotation",0,360,0);
+        //動畫持續時間 以毫秒變化
+        animRotate.setDuration(600);
+        animRotate.setRepeatCount(ObjectAnimator.INFINITE);
+        //設定動畫變化的快慢 Accelerate 加速 Decelerate減速 Interpolator中間快前後慢
+        animRotate.setInterpolator(new AccelerateDecelerateInterpolator());
+        animRotate.start();
+    }
 
     public void playDrawableAnimation() {
 
